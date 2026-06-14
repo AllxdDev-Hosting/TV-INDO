@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio | AllxdDev - Hosting</title>
+    <meta name="description" content="Portofolio AllxdDev - Hosting, seorang pengembang Bot, Website Modern, Backend, dan AI.">
+    <meta name="keywords" content="developer, bot, website, backend, ai, portfolio, AllxdDev - Hosting">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* slate-900 */
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5); /* slate-800 with opacity */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(51, 65, 85, 0.5); /* slate-700 with opacity */
+        }
+        .skill-bar-fill {
+            transition: width 0.8s ease-in-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 1;
+            transition: transform 1s cubic-bezier(0.17, 0.84, 0.44, 1), opacity 1s ease-out;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Preloader Styles */
+        #preloader { transition: opacity 0.5s ease-out, visibility 0.5s ease-out; }
+        .loading-bar-container { width: 80%; max-width: 400px; height: 8px; background-color: rgba(255, 255, 255, 0.2); border-radius: 4px; overflow: hidden; }
+        .loading-bar { width: 0; height: 100%; background-color: #22d3ee; border-radius: 4px; animation: fill-bar 4.5s ease-out forwards; }
+        @keyframes fill-bar { from { width: 0%; } to { width: 100%; } }
+        .content-hidden { opacity: 0; visibility: hidden; }
+        
+        /* Typing Effect */
+        #typing-name::after { content: '_'; display: inline-block; vertical-align: text-bottom; animation: blink 0.7s infinite; color: #22d3ee; font-weight: bold; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Tech Tags & Inputs */
+        .tech-tag { background-color: #334155; color: #94a3b8; padding: 4px 10px; border-radius: 9999px; font-size: 0.8rem; font-weight: 500; display: inline-block;}
+        .contact-input { width: 100%; background-color: #1e293b; border: 1px solid #334155; color: #e2e8f0; border-radius: 0.5rem; padding: 0.75rem 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
+        .contact-input:focus { outline: none; border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2); }
+
+        /* Chat Scrollbar Custom */
+        #chat-messages::-webkit-scrollbar { width: 6px; }
+        #chat-messages::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); border-radius: 4px;}
+        #chat-messages::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+    </style>
+</head>
+<body class="text-slate-300 overflow-x-hidden">
+
+    <canvas id="background-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+
+    <div id="preloader" class="fixed inset-0 bg-slate-900 flex flex-col justify-center items-center z-[100] gap-4">
+        <h1 class="text-3xl font-bold text-white tracking-widest text-center px-4">Portofolio AllxdDev</h1>
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+        <p class="text-slate-400 text-sm tracking-widest">Loading...</p>
+    </div>
+
+    <header class="bg-slate-900/80 backdrop-blur-lg sticky top-0 z-40 border-b border-slate-800 content-hidden">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-white tracking-wider">AllxdDev</a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="#about" class="hover:text-cyan-400 transition-colors duration-300">Tentang Saya</a>
+                <a href="#skills" class="hover:text-cyan-400 transition-colors duration-300">Keterampilan</a>
+                <a href="#projects" class="hover:text-cyan-400 transition-colors duration-300">Projek</a>
+                <a href="#contact" class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors duration-300">Hubungi Saya</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 md:px-6 py-12 md:py-20 content-hidden">
+
+        <section class="text-center min-h-[60vh] flex flex-col justify-center items-center">
+            <div class="max-w-4xl px-4">
+                <h1 id="typing-name" class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-4 min-h-[80px] md:min-h-[168px]"></h1>
+                <p class="text-base sm:text-lg md:text-2xl text-cyan-400 font-semibold mb-8">
+                    Bot, Modern Website, Backend & AI Developer
+                </p>
+                <div class="flex justify-center space-x-4 sm:space-x-5">
+                    <a href="https://github.com/AllxdDev-Hosting?tab=repositories" target="_blank" class="text-slate-400 hover:text-white transition-colors duration-300"><i data-lucide="github" class="w-7 h-7 sm:w-8 sm:h-8"></i></a>
+                    <a href="mailto:allxddev@gmail.com" class="text-slate-400 hover:text-white transition-colors duration-300"><i data-lucide="mail" class="w-7 h-7 sm:w-8 sm:h-8"></i></a>
+                    <a href="https://wa.me/6288297793616" target="_blank" class="text-slate-400 hover:text-white transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </a>
+                    <a href="https://t.me/allxddev" target="_blank" class="text-slate-400 hover:text-white transition-colors duration-300"><i data-lucide="send" class="w-7 h-7 sm:w-8 sm:h-8"></i></a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="about" class="py-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Tentang Saya</h2>
+            </div>
+            <div class="glass-card rounded-xl p-6 md:p-10 grid md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-4">
+                     <img src="logo.png" alt="Logo AllxdDev - Hosting" class="rounded-full w-40 h-40 sm:w-48 sm:h-48 md:w-full md:h-auto mx-auto border-4 border-slate-700 shadow-lg" onerror="this.src='https://placehold.co/400x400/0f172a/38bdf8?text=AllxdDev'">
+                </div>
+                <div class="md:col-span-8">
+                    <p class="text-base sm:text-lg mb-6 text-slate-300 leading-relaxed">
+                        Seorang Developer yang bersemangat dalam mengembangkan Bot, Website Modern, Backend, dan AI. Saya berfokus untuk menciptakan solusi yang efisien dengan menggunakan modal sekecil mungkin, memaksimalkan teknologi open-source dan layanan yang hemat biaya.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6">
+                        <div><strong class="block text-cyan-400">Umur:</strong><span id="age">...</span> Tahun</div>
+                        <div><strong class="block text-cyan-400">Lokasi:</strong><span>Lampung Selatan, Indonesia</span></div>
+                        <div><strong class="block text-cyan-400">Favorit:</strong><span>Coding & Game</span></div>
+                        <div><strong class="block text-cyan-400">Pengalaman:</strong><span id="experience">...</span></div>
+                    </div>
+                    <div>
+                        <strong class="block text-cyan-400 mb-2">Pendidikan:</strong>
+                        <ul class="list-disc list-inside space-y-1 text-slate-400 text-sm sm:text-base">
+                            <li>SMK YPI Tanjung Bintang</li>
+                            <li>SMPN 1 Merbau Mataram</li>
+                            <li>SDN 2 Panca Tunggal</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Keterampilan Profesional</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div class="glass-card rounded-xl p-6 sm:p-8">
+                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-6 text-center">Frontend</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5 Icon" class="w-5 h-5"> HTML</span><span class="text-sm font-medium text-slate-400">100%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-cyan-500 h-2 rounded-full skill-bar-fill" data-level="100%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="React Icon" class="w-5 h-5"> React</span><span class="text-sm font-medium text-slate-400">95%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-cyan-500 h-2 rounded-full skill-bar-fill" data-level="95%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" alt="Next.js Icon" class="w-5 h-5 bg-white rounded-full p-0.5"> Next.js</span><span class="text-sm font-medium text-slate-400">90%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-cyan-500 h-2 rounded-full skill-bar-fill" data-level="90%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript Icon" class="w-5 h-5"> TypeScript</span><span class="text-sm font-medium text-slate-400">88%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-cyan-500 h-2 rounded-full skill-bar-fill" data-level="88%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS Icon" class="w-5 h-5"> Tailwind CSS</span><span class="text-sm font-medium text-slate-400">92%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-cyan-500 h-2 rounded-full skill-bar-fill" data-level="92%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg" alt="Vue.js Icon" class="w-5 h-5"> Vue.js</span><span class="text-sm font-medium text-slate-400">85%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-cyan-500 h-2 rounded-full skill-bar-fill" data-level="85%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg" alt="PHP Icon" class="w-5 h-5"> PHP</span><span class="text-sm font-medium text-slate-400">50%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-cyan-500 h-2 rounded-full skill-bar-fill" data-level="50%" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-6 sm:p-8">
+                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-6 text-center">Backend</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original-wordmark.svg" alt="Node.js Icon" class="w-5 h-5"> Node.js</span><span class="text-sm font-medium text-slate-400">93%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full skill-bar-fill" data-level="93%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg" alt="Express.js Icon" class="w-5 h-5 bg-white rounded-full p-0.5"> Express.js</span><span class="text-sm font-medium text-slate-400">90%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full skill-bar-fill" data-level="90%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg" alt="Supabase Icon" class="w-5 h-5"> Supabase</span><span class="text-sm font-medium text-slate-400">85%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full skill-bar-fill" data-level="85%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="PostgreSQL Icon" class="w-5 h-5"> PostgreSQL</span><span class="text-sm font-medium text-slate-400">82%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full skill-bar-fill" data-level="82%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg" alt="GraphQL Icon" class="w-5 h-5"> GraphQL</span><span class="text-sm font-medium text-slate-400">88%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full skill-bar-fill" data-level="88%" style="width: 0%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1"><span class="font-medium text-slate-200 flex items-center gap-2"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg" alt="Firebase Icon" class="w-5 h-5"> Firebase</span><span class="text-sm font-medium text-slate-400">85%</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full skill-bar-fill" data-level="85%" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-xl p-6 sm:p-8">
+                    <h3 class="text-xl sm:text-2xl font-bold text-white mb-6 text-center">Artificial Intelligence</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 bg-slate-900/50 py-3 px-4 rounded-lg">
+                            <img src="foto/a.jpg" alt="Gemini API Icon" class="w-6 h-6 object-cover rounded" onerror="this.src='https://www.gstatic.com/a/guides/images/gemini-icon.svg'">
+                            <span class="text-base sm:text-lg">Gemini API</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-900/50 py-3 px-4 rounded-lg">
+                            <img src="foto/b.jpg" alt="OpenAI API Icon" class="w-6 h-6 object-cover rounded" onerror="this.src='https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/openai/openai-original.svg'">
+                            <span class="text-base sm:text-lg">OpenAI API</span>
+                        </div>
+                        <div class="flex items-center gap-3 bg-slate-900/50 py-3 px-4 rounded-lg">
+                             <img src="foto/c.jpg" alt="Deepseek Icon" class="w-6 h-6 object-cover rounded-full" onerror="this.src='https://avatars.githubusercontent.com/u/148083838?s=200&v=4'">
+                            <span class="text-base sm:text-lg">Deepseek</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Projek Terbaru</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">Berikut adalah beberapa pekerjaan yang telah saya lakukan.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <a href="https://allxddev.com" target="_blank" class="glass-card rounded-xl overflow-hidden group block hover:ring-2 hover:ring-cyan-500 transition-all duration-300">
+                    <img src="foto/1.jpg" alt="allxddev.com" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/600x400/0f172a/38bdf8?text=allxddev.com'">
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-white mb-2">allxddev.com</h3>
+                        <p class="text-slate-400 mb-4 text-sm sm:text-base">Layanan platform digital AllxdDev - Hosting yang menyediakan berbagai solusi pengembangan aplikasi.</p>
+                        <div class="flex flex-wrap gap-2 mt-4"><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span><span class="tech-tag">Node.js</span><span class="tech-tag">PHP</span></div>
+                    </div>
+                </a>
+                <a href="https://createsubdo-allxddev.vercel.app" target="_blank" class="glass-card rounded-xl overflow-hidden group block hover:ring-2 hover:ring-cyan-500 transition-all duration-300">
+                    <img src="foto/2.jpg" alt="Create Subdomain" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/600x400/0f172a/10b981?text=Create+Subdomain'">
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Create Subdomain</h3>
+                        <p class="text-slate-400 mb-4 text-sm sm:text-base">Alat otomatis untuk membuat dan mengelola subdomain yang terintegrasi dengan API Cloudflare.</p>
+                        <div class="flex flex-wrap gap-2 mt-4"><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span><span class="tech-tag">Node.js</span><span class="tech-tag">Cloudflare</span></div>
+                    </div>
+                </a>
+                <a href="https://scanner-qrallxd.vercel.app" target="_blank" class="glass-card rounded-xl overflow-hidden group block hover:ring-2 hover:ring-cyan-500 transition-all duration-300">
+                    <img src="foto/3.jpg" alt="Scanner Hotspot" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/600x400/0f172a/f59e0b?text=Scanner+Hotspot'">
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Scanner Hotspot</h3>
+                        <p class="text-slate-400 mb-4 text-sm sm:text-base">Aplikasi untuk memindai QR code dan mendapatkan kredensial untuk login ke jaringan hotspot.</p>
+                        <div class="flex flex-wrap gap-2 mt-4"><span class="tech-tag">HTML</span><span class="tech-tag">CSS</span><span class="tech-tag">Node.js</span></div>
+                    </div>
+                </a>
+                <a href="https://brat-allxd.vercel.app" target="_blank" class="glass-card rounded-xl overflow-hidden group block hover:ring-2 hover:ring-cyan-500 transition-all duration-300">
+                    <img src="foto/4.jpg" alt="Brat Generate" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/600x400/0f172a/ef4444?text=Brat+Generate'">
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Brat Generate</h3>
+                        <p class="text-slate-400 mb-4 text-sm sm:text-base">Sebuah alat generator untuk berbagai keperluan developer, dibangun dengan antarmuka yang simpel.</p>
+                        <div class="flex flex-wrap gap-2 mt-4"><span class="tech-tag">HTML</span><span class="tech-tag">Node.js</span></div>
+                    </div>
+                </a>
+                <a href="https://pnl-five.vercel.app" target="_blank" class="glass-card rounded-xl overflow-hidden group block hover:ring-2 hover:ring-cyan-500 transition-all duration-300">
+                    <img src="foto/5.jpg" alt="Buy Panel Otomatis" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://placehold.co/600x400/0f172a/8b5cf6?text=Buy+Panel+Otomatis'">
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-white mb-2">Buy Panel Otomatis</h3>
+                        <p class="text-slate-400 mb-4 text-sm sm:text-base">Website panel penjualan otomatis yang terintegrasi dengan pembayaran QRIS.</p>
+                        <div class="flex flex-wrap gap-2 mt-4"><span class="tech-tag">HTML</span><span class="tech-tag">Node.js</span><span class="tech-tag">API</span></div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 scroll-mt-20">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Hubungi Saya</h2>
+                <p class="mt-2 text-slate-400 text-sm sm:text-base">Punya pertanyaan atau proposal? Kirimkan saya tiket atau hubungi langsung.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                <a href="mailto:allxddev@gmail.com" class="glass-card p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-slate-700/50 transition-colors"><i data-lucide="mail" class="w-7 h-7 text-cyan-400"></i><span class="text-sm">allxddev@gmail.com</span></a>
+                <a href="https://wa.me/6288297793616" target="_blank" class="glass-card p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-slate-700/50 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-400"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg><span class="text-sm">WhatsApp</span></a>
+                <a href="https://t.me/allxddev" target="_blank" class="glass-card p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-slate-700/50 transition-colors"><i data-lucide="send" class="w-7 h-7 text-cyan-400"></i><span class="text-sm">t.me/allxddev</span></a>
+            </div>
+
+            <div class="max-w-2xl mx-auto glass-card rounded-xl p-6 sm:p-8">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl sm:text-2xl font-bold text-white">Atau Kirim Pesan (Tiket)</h3>
+                </div>
+                <form id="contact-form">
+                    <div class="mb-5">
+                        <label for="name" class="block mb-2 text-sm font-medium text-slate-300">Nama Anda</label>
+                        <input type="text" id="name" name="name" class="contact-input" placeholder="Nama Anda" required>
+                    </div>
+                    <div class="mb-5">
+                        <label for="email" class="block mb-2 text-sm font-medium text-slate-300">Email Anda</label>
+                        <input type="email" id="email" name="email" class="contact-input" placeholder="anda@email.com" required>
+                    </div>
+                    <div class="mb-5">
+                        <label for="message" class="block mb-2 text-sm font-medium text-slate-300">Pesan Anda</label>
+                        <textarea id="message" name="message" rows="4" class="contact-input" placeholder="Tulis pesan Anda di sini..." required></textarea>
+                    </div>
+                    <button type="submit" id="submit-button" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        <span>Kirim Tiket</span>
+                    </button>
+                    <div id="form-status" class="mt-4 text-center text-sm"></div>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="border-t border-slate-800 content-hidden">
+        <div class="container mx-auto px-6 py-8 text-center text-slate-400">
+             <div class="flex justify-center space-x-5 mb-4">
+                <a href="https://github.com/AllxdDev-Hosting?tab=repositories" target="_blank" class="hover:text-white transition-colors duration-300" aria-label="GitHub"><i data-lucide="github" class="w-6 h-6"></i></a>
+                <a href="mailto:allxddev@gmail.com" class="hover:text-white transition-colors duration-300" aria-label="Email"><i data-lucide="mail" class="w-6 h-6"></i></a>
+                <a href="https://wa.me/6288297793616" target="_blank" class="hover:text-white transition-colors duration-300" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></a>
+                <a href="https://t.me/allxddev" target="_blank" class="hover:text-white transition-colors duration-300" aria-label="Telegram"><i data-lucide="send" class="w-6 h-6"></i></a>
+            </div>
+            <p>&copy; <span id="copyright-year"></span> AllxdDev - Hosting. Dibuat dengan cinta dan kode.</p>
+        </div>
+    </footer>
+
+    <div id="ai-chatbot-container" class="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-[100]">
+        
+        <div id="chat-panel" class="absolute bottom-16 right-0 w-[calc(100vw-3rem)] max-w-[350px] h-[450px] max-h-[70vh] bg-slate-900/95 backdrop-blur-xl rounded-xl shadow-2xl border border-cyan-500/30 flex flex-col overflow-hidden transition-all duration-300 opacity-0 scale-95 pointer-events-none origin-bottom-right">
+            <div class="bg-slate-800/80 p-4 border-b border-cyan-500/30 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></div>
+                    <span class="font-bold text-white tracking-wide text-sm sm:text-base">Allxd AI Assistant</span>
+                </div>
+                <button id="close-chat" class="text-slate-400 hover:text-white transition-colors p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto flex flex-col gap-3">
+                <div class="self-start bg-slate-800 border border-cyan-500/20 text-slate-200 px-4 py-2.5 rounded-2xl rounded-tl-sm max-w-[85%] text-sm shadow-sm">
+                    Halo! Gw asisten AI-nya AllxdDev. Lu bisa nanya apa aja tentang skill, project, atau profilnya AllxdDev. Ketik di bawah atau pakai suara ya! 🎙️
+                </div>
+            </div>
+
+            <div class="p-3 bg-slate-800/80 border-t border-cyan-500/30 flex items-center gap-2">
+                <button id="chat-mic-btn" class="p-2 sm:p-2.5 rounded-full bg-slate-700 text-cyan-400 hover:bg-cyan-500 hover:text-white transition-colors flex-shrink-0" title="Tahan/Klik untuk bicara">
+                    <i data-lucide="mic" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                </button>
+                <input type="text" id="chat-input" class="flex-1 bg-slate-900 border border-slate-600 rounded-full px-4 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-400 transition-colors" placeholder="Tanya sesuatu...">
+                <button id="chat-send-btn" class="p-2 sm:p-2.5 rounded-full bg-cyan-500 text-white hover:bg-cyan-600 transition-colors flex-shrink-0">
+                    <i data-lucide="send" class="w-4 h-4 ml-0.5"></i>
+                </button>
+            </div>
+        </div>
+
+        <button id="toggle-chat-btn" class="bg-cyan-500/20 border border-cyan-500/50 hover:bg-cyan-500 p-3 sm:p-4 rounded-full shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all duration-300 transform hover:scale-110 group flex items-center justify-center relative">
+            <i data-lucide="message-square-text" class="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400 group-hover:text-white transition-colors"></i>
+        </button>
+    </div>
+
+    <script>
+        // --- PRELOADER & PAGE LOAD ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                const content = document.querySelectorAll('.content-hidden');
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                content.forEach(el => { el.style.transition = 'opacity 0.5s ease-in'; el.classList.remove('content-hidden'); });
+                setTimeout(typeName, 500);
+            }, 4500);
+        });
+
+        // --- TYPING EFFECT ---
+        const nameText = "AllxdDev - Hosting";
+        const nameElement = document.getElementById('typing-name');
+        let charIndex = 0;
+        function typeName() {
+            if (charIndex < nameText.length) {
+                nameElement.textContent += nameText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeName, 100);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // --- DYNAMIC CONTENT ---
+            const birthDate = new Date('2008-03-23');
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) { age--; }
+            document.getElementById('age').textContent = age;
+
+            const experience = new Date().getFullYear() - 2021;
+            document.getElementById('experience').textContent = `${experience} Tahun`;
+            document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+            // --- OBSERVERS ---
+            const skillObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => { bar.style.width = bar.getAttribute('data-level'); });
+                        skillObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            if(document.querySelector('#skills')) skillObserver.observe(document.querySelector('#skills'));
+            
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in-up');
+                        sectionObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('section').forEach(section => sectionObserver.observe(section));
+
+            // --- PARTICLES ---
+            document.addEventListener('mousemove', function(e) { if (Math.random() > 0.5) createParticle(e.clientX, e.clientY); });
+            function createParticle(x, y) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                document.body.appendChild(particle);
+                const size = Math.random() * 4 + 1;
+                const colors = ['#22d3ee', '#34d399', '#ffffff'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.width = `${size}px`; particle.style.height = `${size}px`;
+                particle.style.backgroundColor = color; particle.style.boxShadow = `0 0 6px ${color}`;
+                particle.style.left = `${x}px`; particle.style.top = `${y}px`;
+                const destX = (Math.random() - 0.5) * 150; const destY = (Math.random() - 0.5) * 150;
+                particle.offsetWidth; 
+                particle.style.transform = `translate(calc(-50% + ${destX}px), calc(-50% + ${destY}px))`;
+                particle.style.opacity = 0;
+                setTimeout(() => particle.remove(), 1000);
+            }
+
+            // --- TELEGRAM BOT ---
+            const contactForm = document.getElementById('contact-form');
+            const submitButton = document.getElementById('submit-button');
+            const formStatus = document.getElementById('form-status');
+            function escapeHTML(str) { const p = document.createElement('p'); p.textContent = str; return p.innerHTML; }
+            const telegramBotToken = '8155220068:AAHG-YsePgpHOiWnpUsIcNI97WaCvJZu2zE';
+            const telegramChatId = '8100109991';
+            contactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                submitButton.disabled = true; const originalButtonHTML = submitButton.innerHTML;
+                submitButton.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>Mengirim...</span>`;
+                formStatus.textContent = ''; formStatus.className = 'mt-4 text-center text-sm font-medium';
+                const formattedMessage = `<b>🔔 TIKET PORTFOLIO BARU 🔔</b>\n\n<b>👤 Nama:</b> ${escapeHTML(document.getElementById('name').value)}\n<b>📧 Email:</b> ${escapeHTML(document.getElementById('email').value)}\n\n<b>💬 Pesan:</b>\n<pre>${escapeHTML(document.getElementById('message').value)}</pre>`;
+                try {
+                    const response = await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: telegramChatId, text: formattedMessage, parse_mode: 'HTML' }) });
+                    const result = await response.json();
+                    if (result.ok) { formStatus.textContent = '✅ Tiket berhasil terkirim!'; formStatus.classList.add('text-green-400'); contactForm.reset(); } 
+                    else { throw new Error(result.description); }
+                } catch (error) { formStatus.textContent = '❌ Gagal: ' + error.message; formStatus.classList.add('text-red-400'); } 
+                finally { submitButton.disabled = false; submitButton.innerHTML = originalButtonHTML; lucide.createIcons(); }
+            });
+
+            // --- BACKGROUND ANIMATION ---
+            const canvas = document.getElementById('background-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            const logoUrls = ['https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vuejs/vuejs-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg', 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg'];
+            let logos = []; const logoCount = 15;
+            class FloatingLogo {
+                constructor(image, x, y, size, vx, vy) { this.image = image; this.x = x; this.y = y; this.size = size; this.vx = vx; this.vy = vy; this.alpha = 0; }
+                draw() { ctx.globalAlpha = this.alpha; ctx.drawImage(this.image, this.x, this.y, this.size, this.size); ctx.globalAlpha = 1; }
+                update() { if (this.alpha < 0.2) this.alpha += 0.005; this.x += this.vx; this.y += this.vy; if (this.x <= 0 || this.x + this.size >= canvas.width) this.vx *= -1; if (this.y <= 0 || this.y + this.size >= canvas.height) this.vy *= -1; }
+            }
+            function initLogos(loadedImages) { logos = []; for (let i = 0; i < logoCount; i++) { const img = loadedImages[i % loadedImages.length]; const size = Math.random() * 30 + 20; const x = Math.random() * (canvas.width - size); const y = Math.random() * (canvas.height - size); const vx = (Math.random() - 0.5) * 0.4; const vy = (Math.random() - 0.5) * 0.4; logos.push(new FloatingLogo(img, x, y, size, vx, vy)); } }
+            function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); logos.forEach(logo => { logo.update(); logo.draw(); }); requestAnimationFrame(animate); }
+            Promise.all(logoUrls.map(url => new Promise(res => { const img = new Image(); img.onload = () => res(img); img.onerror = () => res(null); img.src = url; }))).then(results => { const loaded = results.filter(img => img !== null); if(loaded.length > 0) { initLogos(loaded); animate(); } });
+            window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+
+            // ==========================================
+            // --- REAL AI CHATBOT LOGIC (GEMINI API) ---
+            // ==========================================
+            const toggleChatBtn = document.getElementById('toggle-chat-btn');
+            const chatPanel = document.getElementById('chat-panel');
+            const closeChatBtn = document.getElementById('close-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            const chatMicBtn = document.getElementById('chat-mic-btn');
+            
+            // API KEY LU DI SINI
+            const GEMINI_API_KEY = 'AIzaSyAvdcqNXklUnuN0mLHo49CrYP4cpn2zbZA'; 
+            
+            let isChatOpen = false;
+            let isAiThinking = false;
+
+            toggleChatBtn.addEventListener('click', () => {
+                isChatOpen = !isChatOpen;
+                if(isChatOpen) {
+                    chatPanel.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                    chatPanel.classList.add('pointer-events-auto');
+                    toggleChatBtn.classList.add('scale-0');
+                    setTimeout(() => chatInput.focus(), 300);
+                }
+            });
+
+            closeChatBtn.addEventListener('click', () => {
+                isChatOpen = false;
+                chatPanel.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                chatPanel.classList.remove('pointer-events-auto');
+                toggleChatBtn.classList.remove('scale-0');
+            });
+
+            function appendMessage(sender, text) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `px-4 py-2.5 rounded-2xl max-w-[85%] text-sm shadow-sm ${
+                    sender === 'user' 
+                    ? 'self-end bg-cyan-500 text-white rounded-tr-sm' 
+                    : 'self-start bg-slate-800 border border-cyan-500/20 text-slate-200 rounded-tl-sm'
+                }`;
+                msgDiv.innerHTML = text.replace(/\n/g, '<br>');
+                chatMessages.appendChild(msgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // --- SYSTEM PROMPT (Otak Utama AI) ---
+            function getSystemPrompt() {
+                const currentAge = document.getElementById('age').textContent;
+                const exp = document.getElementById('experience').textContent;
+                
+                return `Kamu adalah asisten AI interaktif untuk portofolio AllxdDev - Hosting. Jawab pertanyaan pengunjung HANYA berdasarkan konteks ini. 
+                Tugasmu: Menjawab layaknya asisten yang pintar, santai, agak gaul (pakai kata lu/gw atau sapaan asik), dan tidak bertele-tele.
+                
+                INFORMASI UTAMA:
+                - Nama: AllxdDev
+                - Umur: ${currentAge} tahun.
+                - Domisili: Lampung Selatan, Indonesia.
+                - Pendidikan: SMK YPI Tanjung Bintang (sebelumnya SMPN 1 Merbau Mataram, SDN 2 Panca Tunggal).
+                - Pengalaman: ${exp}.
+                
+                KEMAMPUAN (SKILL):
+                - Frontend: HTML (100%), React (95%), Next.js (90%), TypeScript (88%), Tailwind CSS (92%), Vue.js (85%).
+                - Backend: Sangat jago Node.js (93%), Express.js (90%), Supabase (85%), PostgreSQL (82%), GraphQL (88%), Firebase (85%). Dia juga menggunakan PHP (50%).
+                - Integrasi AI: Menguasai Gemini API, OpenAI API, dan Deepseek.
+                - Sistem/Server: Paham mengelola Linux, VPS, dan server hosting.
+                
+                PROJEK TERBARU:
+                - Web "allxddev.com" (Layanan platform digital AllxdDev - Hosting dengan integrasi PHP).
+                - Create Subdomain otomatis via API Cloudflare.
+                - Scanner Hotspot (QR Code login).
+                - Brat Generate.
+                - Buy Panel Otomatis (Web panel penjualan dengan QRIS).
+                - Projek lainnya: Bug Slayer, Scammer Information by AllxdDev, dan bot WhatsApp interaktif.
+                
+                KONTAK:
+                - Lewat fitur pengiriman Tiket di website ini.
+                - Email: allxddev@gmail.com
+                - WhatsApp dan Telegram (@allxddev).
+                
+                ATURAN PENTING:
+                1. Jika ditanya hal di luar informasi di atas, jawab dengan ramah bahwa kamu hanya AI asisten yang tahu seputar portofolio AllxdDev.
+                2. Jangan mengarang informasi/halusinasi.
+                3. Jangan merespons dengan format Markdown yang rumit (jangan pakai bintang ganda **), gunakan teks biasa saja agar enak didengar saat dibacakan oleh suara AI.`;
+            }
+
+            // Panggil API Gemini 2.5 Flash
+            async function panggilGemini(pesanUser) {
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                    
+                    const payload = {
+                        contents: [
+                            {
+                                parts: [
+                                    { text: getSystemPrompt() + "\n\n---PERTANYAAN PENGUNJUNG---\n" + pesanUser }
+                                ]
+                            }
+                        ]
+                    };
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+                    
+                    if(data.error) {
+                        console.error("Gemini API Error:", data.error);
+                        return `🚨 ERROR API: ${data.error.message}`; 
+                    }
+
+                    return data.candidates[0].content.parts[0].text;
+                } catch (error) {
+                    console.error("Fetch Error:", error);
+                    return `🚨 ERROR KONEKSI: Coba cek internet lu atau buka fitur Inspect Element buat liat error lognya.`;
+                }
+            }
+
+            // Fungsi Handle Chat
+            async function handleSendChat(textOverride) {
+                if (isAiThinking) return;
+                
+                const text = textOverride || chatInput.value.trim();
+                if (!text) return;
+                
+                appendMessage('user', text);
+                chatInput.value = '';
+                chatInput.disabled = true;
+                chatSendBtn.classList.add('opacity-50');
+                isAiThinking = true;
+
+                // Tampilkan indikator loading (typing)
+                const typingId = "typing-" + Date.now();
+                const typingDiv = document.createElement('div');
+                typingDiv.id = typingId;
+                typingDiv.className = "self-start bg-slate-800 border border-cyan-500/20 text-slate-400 px-4 py-2.5 rounded-2xl rounded-tl-sm text-sm animate-pulse";
+                typingDiv.innerHTML = "Lagi mikir...";
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Proses Jawaban
+                const jawabanAI = await panggilGemini(text);
+                
+                // Hapus indikator loading
+                document.getElementById(typingId).remove();
+                
+                // Tampilkan & Ucapkan
+                appendMessage('ai', jawabanAI);
+                ucapkan(jawabanAI);
+
+                // Reset state
+                chatInput.disabled = false;
+                chatSendBtn.classList.remove('opacity-50');
+                chatInput.focus();
+                isAiThinking = false;
+            }
+
+            chatSendBtn.addEventListener('click', () => handleSendChat());
+            chatInput.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') handleSendChat();
+            });
+
+            // --- SPEECH RECOGNITION (MIC) ---
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const synth = window.speechSynthesis;
+
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'id-ID';
+                recognition.interimResults = false;
+                let isRecording = false;
+
+                chatMicBtn.addEventListener('click', () => {
+                    if(isAiThinking) return;
+                    if (isRecording) recognition.stop();
+                    else {
+                        synth.cancel();
+                        recognition.start();
+                    }
+                });
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    chatMicBtn.classList.replace('bg-slate-700', 'bg-red-500');
+                    chatMicBtn.classList.replace('text-cyan-400', 'text-white');
+                    chatMicBtn.classList.add('animate-pulse');
+                    chatInput.placeholder = "Mendengarkan lu ngomong...";
+                };
+
+                recognition.onspeechend = function() {
+                    recognition.stop();
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    resetMicUI();
+                    handleSendChat(transcript);
+                };
+
+                recognition.onerror = function(event) {
+                    resetMicUI();
+                    appendMessage('ai', "Sori, suara lu putus-putus. Coba ngomong lagi.");
+                };
+
+                function resetMicUI() {
+                    isRecording = false;
+                    chatMicBtn.classList.replace('bg-red-500', 'bg-slate-700');
+                    chatMicBtn.classList.replace('text-white', 'text-cyan-400');
+                    chatMicBtn.classList.remove('animate-pulse');
+                    chatInput.placeholder = "Tanya sesuatu...";
+                }
+
+                function ucapkan(text) {
+                    if (synth.speaking) synth.cancel();
+                    
+                    // Hilangkan tanda baca markdown agar enak didengar
+                    const cleanText = text.replace(/[\*\_]/g, '');
+                    
+                    const utterThis = new SpeechSynthesisUtterance(cleanText);
+                    utterThis.lang = 'id-ID';
+                    
+                    const voices = synth.getVoices();
+                    const indonesianVoice = voices.find(voice => voice.lang === 'id-ID' || voice.lang === 'id_ID');
+                    if(indonesianVoice) utterThis.voice = indonesianVoice;
+
+                    utterThis.pitch = 1.0;
+                    utterThis.rate = 1.05;
+                    synth.speak(utterThis);
+                }
+                
+                speechSynthesis.onvoiceschanged = () => synth.getVoices();
+            } else {
+                chatMicBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
